@@ -434,6 +434,8 @@ def load_tools(
         callback_manager=kwargs.get("callback_manager"), callbacks=callbacks
     )
     for name in tool_names:
+        name = name.lower()
+
         if name == "requests":
             warnings.warn(
                 "tool name `requests` is deprecated - "
