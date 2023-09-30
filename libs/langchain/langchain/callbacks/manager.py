@@ -51,6 +51,7 @@ from langchain.schema import (
 )
 from langchain.schema.messages import BaseMessage, get_buffer_string
 from langchain.schema.output import ChatGenerationChunk, GenerationChunk
+from langchain.schema.tool import ToolOutput
 
 if TYPE_CHECKING:
     from langsmith import Client as LangSmithClient
@@ -964,13 +965,13 @@ class CallbackManagerForToolRun(ParentRunManager, ToolManagerMixin):
 
     def on_tool_end(
         self,
-        output: str,
+        output: ToolOutput,
         **kwargs: Any,
     ) -> None:
         """Run when tool ends running.
 
         Args:
-            output (str): The output of the tool.
+            output (ToolOutput): The output of the tool.
         """
         _handle_event(
             self.handlers,

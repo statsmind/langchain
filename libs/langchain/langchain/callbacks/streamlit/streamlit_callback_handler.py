@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, NamedTuple, Optional
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.callbacks.streamlit.mutable_expander import MutableExpander
 from langchain.schema import AgentAction, AgentFinish, LLMResult
+from langchain.schema.tool import ToolOutput
 
 if TYPE_CHECKING:
     from streamlit.delta_generator import DeltaGenerator
@@ -361,7 +362,7 @@ class StreamlitCallbackHandler(BaseCallbackHandler):
 
     def on_tool_end(
         self,
-        output: str,
+        output: ToolOutput,
         color: Optional[str] = None,
         observation_prefix: Optional[str] = None,
         llm_prefix: Optional[str] = None,

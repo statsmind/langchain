@@ -27,6 +27,8 @@ from langchain.pydantic_v1 import (
 )
 from langchain.schema.runnable import Runnable, RunnableConfig
 
+from langchain.schema.tool import ToolOutput
+
 
 class SchemaAnnotationError(TypeError):
     """Raised when 'args_schema' is missing or has an incorrect type annotation."""
@@ -351,18 +353,20 @@ class ChildTool(BaseTool):
                     f"Got unexpected type of `handle_tool_error`. Expected bool, str "
                     f"or callable. Received: {self.handle_tool_error}"
                 )
+            tool_output = ToolOutput(input=parsed_input, observation=str(observation))
             run_manager.on_tool_end(
-                str(observation), color="red", name=self.name, **kwargs
+                tool_output, color="red", name=self.name, **kwargs
             )
-            return observation
+            return tool_output.observation
         except (Exception, KeyboardInterrupt) as e:
             run_manager.on_tool_error(e)
             raise e
         else:
+            tool_output = ToolOutput(input=parsed_input, observation=str(observation))
             run_manager.on_tool_end(
-                str(observation), color=color, name=self.name, **kwargs
+                tool_output, color=color, name=self.name, **kwargs
             )
-            return observation
+            return tool_output.observation
 
     async def arun(
         self,
@@ -426,18 +430,20 @@ class ChildTool(BaseTool):
                     f"Got unexpected type of `handle_tool_error`. Expected bool, str "
                     f"or callable. Received: {self.handle_tool_error}"
                 )
+            tool_output = ToolOutput(input=parsed_input, observation=str(observation))
             await run_manager.on_tool_end(
-                str(observation), color="red", name=self.name, **kwargs
+                tool_output, color="red", name=self.name, **kwargs
             )
-            return observation
+            return tool_output.observation
         except (Exception, KeyboardInterrupt) as e:
             await run_manager.on_tool_error(e)
             raise e
         else:
+            tool_output = ToolOutput(input=parsed_input, observation=str(observation))
             await run_manager.on_tool_end(
-                str(observation), color=color, name=self.name, **kwargs
+                tool_output, color=color, name=self.name, **kwargs
             )
-            return observation
+            return tool_output.observation
 
     def __call__(self, tool_input: str, callbacks: Callbacks = None) -> str:
         """Make tool callable."""
