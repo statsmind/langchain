@@ -396,7 +396,7 @@ def _handle_event(
                         args[0],
                         message_strings,
                         *args[2:],
-                        **kwargs,
+                        **kwargs
                     )
                 else:
                     handler_name = handler.__class__.__name__
@@ -603,7 +603,7 @@ class RunManager(BaseRunManager):
             run_id=self.run_id,
             parent_run_id=self.parent_run_id,
             tags=self.tags,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
     def on_retry(
@@ -619,7 +619,7 @@ class RunManager(BaseRunManager):
             run_id=self.run_id,
             parent_run_id=self.parent_run_id,
             tags=self.tags,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
 
@@ -735,7 +735,7 @@ class CallbackManagerForLLMRun(RunManager, LLMManagerMixin):
             parent_run_id=self.parent_run_id,
             tags=self.tags,
             chunk=chunk,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> None:
@@ -752,7 +752,7 @@ class CallbackManagerForLLMRun(RunManager, LLMManagerMixin):
             run_id=self.run_id,
             parent_run_id=self.parent_run_id,
             tags=self.tags,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
     def on_llm_error(
@@ -773,7 +773,7 @@ class CallbackManagerForLLMRun(RunManager, LLMManagerMixin):
             run_id=self.run_id,
             parent_run_id=self.parent_run_id,
             tags=self.tags,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
 
@@ -860,7 +860,7 @@ class CallbackManagerForChainRun(ParentRunManager, ChainManagerMixin):
             run_id=self.run_id,
             parent_run_id=self.parent_run_id,
             tags=self.tags,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
     def on_chain_error(
@@ -881,7 +881,7 @@ class CallbackManagerForChainRun(ParentRunManager, ChainManagerMixin):
             run_id=self.run_id,
             parent_run_id=self.parent_run_id,
             tags=self.tags,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
     def on_agent_action(self, action: AgentAction, **kwargs: Any) -> Any:
@@ -901,7 +901,7 @@ class CallbackManagerForChainRun(ParentRunManager, ChainManagerMixin):
             run_id=self.run_id,
             parent_run_id=self.parent_run_id,
             tags=self.tags,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
     def on_agent_finish(self, finish: AgentFinish, **kwargs: Any) -> Any:
@@ -921,7 +921,7 @@ class CallbackManagerForChainRun(ParentRunManager, ChainManagerMixin):
             run_id=self.run_id,
             parent_run_id=self.parent_run_id,
             tags=self.tags,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
 
@@ -1030,7 +1030,7 @@ class CallbackManagerForToolRun(ParentRunManager, ToolManagerMixin):
             run_id=self.run_id,
             parent_run_id=self.parent_run_id,
             tags=self.tags,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
     def on_tool_error(
@@ -1051,7 +1051,7 @@ class CallbackManagerForToolRun(ParentRunManager, ToolManagerMixin):
             run_id=self.run_id,
             parent_run_id=self.parent_run_id,
             tags=self.tags,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
 
@@ -1114,7 +1114,7 @@ class CallbackManagerForRetrieverRun(ParentRunManager, RetrieverManagerMixin):
             run_id=self.run_id,
             parent_run_id=self.parent_run_id,
             tags=self.tags,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
     def on_retriever_error(
@@ -1131,7 +1131,7 @@ class CallbackManagerForRetrieverRun(ParentRunManager, RetrieverManagerMixin):
             run_id=self.run_id,
             parent_run_id=self.parent_run_id,
             tags=self.tags,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
 
@@ -1207,7 +1207,7 @@ class CallbackManager(BaseCallbackManager):
                 parent_run_id=self.parent_run_id,
                 tags=self.tags,
                 metadata=self.metadata,
-                **kwargs,
+                **{"caller": self, **kwargs}
             )
 
             managers.append(
@@ -1256,7 +1256,7 @@ class CallbackManager(BaseCallbackManager):
                 parent_run_id=self.parent_run_id,
                 tags=self.tags,
                 metadata=self.metadata,
-                **kwargs,
+                **{"caller": self, **kwargs}
             )
 
             managers.append(
@@ -1303,7 +1303,7 @@ class CallbackManager(BaseCallbackManager):
             parent_run_id=self.parent_run_id,
             tags=self.tags,
             metadata=self.metadata,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
         return CallbackManagerForChainRun(
@@ -1349,7 +1349,7 @@ class CallbackManager(BaseCallbackManager):
             parent_run_id=self.parent_run_id,
             tags=self.tags,
             metadata=self.metadata,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
         return CallbackManagerForToolRun(
@@ -1385,7 +1385,7 @@ class CallbackManager(BaseCallbackManager):
             parent_run_id=self.parent_run_id,
             tags=self.tags,
             metadata=self.metadata,
-            **kwargs,
+            **{"caller": self, **kwargs}
         )
 
         return CallbackManagerForRetrieverRun(

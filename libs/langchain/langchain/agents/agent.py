@@ -46,6 +46,7 @@ from langchain.schema import (
 from langchain.schema.language_model import BaseLanguageModel
 from langchain.schema.messages import BaseMessage
 from langchain.schema.runnable import Runnable
+from langchain.schema.agent import DuplicatedActionException
 from langchain.tools.base import BaseTool
 from langchain.utilities.asyncio import asyncio_timeout
 from langchain.utils.input import get_color_mapping
@@ -969,7 +970,12 @@ s
         result = []
         for agent_action in actions:
             if run_manager:
-                run_manager.on_agent_action(agent_action, color="green")
+                try:
+                    run_manager.on_agent_action(agent_action, color="green")
+                except DuplicatedActionException:
+                    result.append((agent_action, "The action and input is duplicated, I should try another tool."))
+                    continue
+
             # Otherwise we lookup the tool
             if agent_action.tool in name_to_tool_map:
                 tool = name_to_tool_map[agent_action.tool]

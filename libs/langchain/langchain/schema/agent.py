@@ -64,3 +64,8 @@ class AgentFinish(Serializable):
     def is_lc_serializable(cls) -> bool:
         """Return whether or not the class is serializable."""
         return True
+
+
+class DuplicatedActionException(ValueError):
+    def __init__(self, error: Any):
+        super().__init__(error)

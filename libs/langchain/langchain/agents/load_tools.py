@@ -1,7 +1,7 @@
 # flake8: noqa
 """Load tools."""
 import warnings
-from typing import Any, Dict, List, Optional, Callable, Tuple
+from typing import Any, Dict, List, Optional, Callable, Tuple, Union
 from mypy_extensions import Arg, KwArg
 
 from langchain.agents.tools import Tool
@@ -427,7 +427,7 @@ def load_huggingface_tool(
 
 
 def load_tools(
-    tool_names: List[str],
+    tool_names: List[Union[str, BaseTool]],
     llm: Optional[BaseLanguageModel] = None,
     callbacks: Callbacks = None,
     **kwargs: Any,
@@ -448,6 +448,10 @@ def load_tools(
         callback_manager=kwargs.get("callback_manager"), callbacks=callbacks
     )
     for name in tool_names:
+        if isinstance(name, BaseTool):
+            tools.append(name)
+            continue
+
         name = name.lower()
 
         if name == "requests":
